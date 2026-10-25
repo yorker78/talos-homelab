@@ -134,6 +134,17 @@ resource "talos_machine" "node" {
   node                  = each.value.ip
   client_configuration  = talos_machine_secrets.this.client_configuration
   machine_configuration = data.talos_machine_configuration.node[each.key].machine_configuration
+  # Matches the running version, so nothing upgrades; bump talos_version to upgrade the nodes.
+  image = data.talos_image_factory_urls.this.urls.installer
+  # Lets the provider drain a node before an upgrade reboot.
+  kubeconfig_wo = ephemeral.talos_cluster_kubeconfig.this.kubeconfig_raw
+}
+
+# Generated from the secrets on each run and never stored in state.
+ephemeral "talos_cluster_kubeconfig" "this" {
+  cluster_name    = local.cluster_name
+  machine_secrets = talos_machine_secrets.this.machine_secrets
+  endpoint        = "https://${local.control_plane_ip}:6443"
 }
 
 resource "talos_cluster" "this" {
