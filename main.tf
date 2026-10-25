@@ -124,16 +124,7 @@ data "talos_machine_configuration" "node" {
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   talos_version      = local.talos_version
   kubernetes_version = local.kubernetes_version
-  config_patches = [
-    yamlencode({
-      machine = {
-        install = {
-          disk  = "/dev/sda"
-          image = data.talos_image_factory_urls.this.urls.installer
-        }
-      }
-    })
-  ]
+  # No install patch: the VMs boot from the Talos disk image, so Talos is already installed.
 }
 
 resource "talos_machine" "node" {
