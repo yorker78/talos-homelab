@@ -134,6 +134,8 @@ resource "talos_machine" "node" {
   node                  = each.value.ip
   client_configuration  = talos_machine_secrets.this.client_configuration
   machine_configuration = data.talos_machine_configuration.node[each.key].machine_configuration
+  # Matches the running version, so nothing upgrades; bump talos_version to upgrade the nodes.
+  image = data.talos_image_factory_urls.this.urls.installer
 }
 
 resource "talos_cluster" "this" {
