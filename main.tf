@@ -32,7 +32,7 @@ locals {
 
 provider "proxmox" {
   endpoint = "https://atlas.home.arpa:8006/"
-  # ponytail: Proxmox's self-signed cert; trust its CA instead if this repo ever leaves the LAN.
+  # Proxmox uses a self-signed cert, and its API is only reachable from the LAN where the runner lives.
   insecure = true
   # API token comes from PROXMOX_VE_API_TOKEN.
 }
